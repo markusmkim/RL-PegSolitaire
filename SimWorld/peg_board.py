@@ -1,3 +1,6 @@
+import networkx as nx
+import matplotlib.pyplot as plt
+
 
 
 # Static initializer of a triangle shaped grid
@@ -139,3 +142,70 @@ class PegBoard:
     def print_board(self):
         for i in range(self.size):
             print(self.grid[i])
+
+
+    def visualize_board(self):
+        if self.isDiamond:
+            G = nx.Graph()
+            blue_nodes = []
+            red_nodes = []
+            positions = {}
+            # Add nodes
+            for i in range(self.size):
+                for j in range(self.size):
+                    # add node
+                    G.add_node((i, j))
+
+                    # split filled/unfilled nodes into different lists to apply different colors
+                    if self.grid[i][j] == 0:
+                        blue_nodes.append((i, j))
+                    else:
+                        red_nodes.append((i, j))
+
+                    # add edges
+                    if i > 0:
+                        G.add_edge((i - 1, j), (i, j))
+                    if j > 0:
+                        G.add_edge((i, j - 1), (i, j))
+                    if i > 0 and j > 0:
+                        G.add_edge((i - 1, j - 1), (i, j))
+
+
+                    # add positions
+                    positions[(i, j)] = (((i + j)*0.8), i - j)  # Works like coordinate system
+
+            # add dummy nodes for scaling, stupid solution but it kind of works
+            dummy_nodes = ['dummy_node_1', 'dummy_node_2']
+            G.add_nodes_from(dummy_nodes)
+            positions['dummy_node_1'] = (-1, 0)
+            positions['dummy_node_2'] = ((self.size * 2) - 1, 0)
+
+            # draw network
+            nx.draw_networkx_nodes(G, positions, nodelist=blue_nodes, node_color='b')
+            nx.draw_networkx_nodes(G, positions, nodelist=red_nodes, node_color='r')
+            nx.draw_networkx_nodes(G, positions, nodelist=dummy_nodes, node_color='w')  # dummy nodes white -> invisible
+            nx.draw_networkx_edges(G, positions)
+            plt.show()
+
+if __name__ == '__main__':
+    board = PegBoard(6, True, [[3, 3]])
+
+    print(board.print_board())
+
+
+
+    print('Actions:')
+    pa = board.get_possible_actions()
+    for i in pa:
+        print(i)
+
+    action = [[1, 1], [2, 2], [3, 3]]
+    print('Excecuting action, ', action)
+    board.execute_action(action)
+
+    board.print_board()
+
+    board.visualize_board()
+
+
+
