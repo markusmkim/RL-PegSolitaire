@@ -2,7 +2,6 @@ import networkx as nx
 import matplotlib.pyplot as plt
 
 
-
 # Static initializer of a triangle shaped grid
 def create_triangle_grid(size, empty_nodes):
     grid = []
@@ -80,43 +79,6 @@ class PegBoard:
         else:
             self.target_nodes = find_target_nodes(size, is_diamond)
 
-    # Returns all possible actions for the current board
-    def all_possible_actions(self):
-        possible_actions = []
-        grid = self.grid
-        size = self.size
-
-        if self.isDiamond:
-            for i in range(size):
-                for j in range(size):
-                    if grid[i][j] == 1:
-
-                        # Direction: up
-                        if i > 1 and grid[i - 1][j] == 1 and grid[i - 2][j] == 0:
-                            possible_actions.append([[i, j], [i - 1, j], [i - 2, j]])
-
-                        # Direction: right
-                        if j < size - 2 and grid[i][j + 1] == 1 and grid[i][j + 2] == 0:
-                            possible_actions.append([[i, j], [i, j + 1], [i, j + 2]])
-
-                        # Direction: down & right
-                        if i < size - 2 and j < size - 2 and grid[i + 1][j + 1] == 1 and grid[i + 2][j + 2] == 0:
-                            possible_actions.append([[i, j], [i + 1, j + 1], [i + 2, j + 2]])
-
-                        # Direction: down
-                        if i < size - 2 and grid[i + 1][j] == 1 and grid[i + 2][j] == 0:
-                            possible_actions.append([[i, j], [i + 1, j], [i + 2, j]])
-
-                        # Direction: left
-                        if j > 1 and grid[i][j - 1] == 1 and grid[i][j - 2] == 0:
-                            possible_actions.append([[i, j], [i, j - 1], [i, j - 2]])
-
-                        # Direction: up & left
-                        if i > 1 and j > 1 and grid[i - 1][j - 1] == 1 and grid[i - 2][j - 2] == 0:
-                            possible_actions.append([[i, j], [i - 1, j - 1], [i - 2, j - 2]])
-
-        return possible_actions
-
     # Executes the provided action on the current board
     def execute_action(self, action):
         self.grid[action[0][0]][action[0][1]] = 0
@@ -143,26 +105,27 @@ class PegBoard:
         for i in range(self.size):
             print(self.grid[i])
 
-
     def visualize_board(self):
         if self.isDiamond:
             G = nx.Graph()
             blue_nodes = []
             red_nodes = []
             positions = {}
+
             # Add nodes
             for i in range(self.size):
                 for j in range(self.size):
-                    # add node
+
+                    # Add node
                     G.add_node((i, j))
 
-                    # split filled/unfilled nodes into different lists to apply different colors
+                    # Split filled/unfilled nodes into different lists to apply different colors
                     if self.grid[i][j] == 0:
                         blue_nodes.append((i, j))
                     else:
                         red_nodes.append((i, j))
 
-                    # add edges
+                    # Add edges
                     if i > 0:
                         G.add_edge((i - 1, j), (i, j))
                     if j > 0:
@@ -170,8 +133,7 @@ class PegBoard:
                     if i > 0 and j > 0:
                         G.add_edge((i - 1, j - 1), (i, j))
 
-
-                    # add positions
+                    # Add positions
                     positions[(i, j)] = (((i + j)*0.8), i - j)  # Works like coordinate system
 
             # add dummy nodes for scaling, stupid solution but it kind of works
@@ -187,25 +149,38 @@ class PegBoard:
             nx.draw_networkx_edges(G, positions)
             plt.show()
 
-if __name__ == '__main__':
-    board = PegBoard(6, True, [[3, 3]])
+        else:
+            G = nx.Graph()
+            blue_nodes = []
+            red_nodes = []
+            positions = {}
 
-    print(board.print_board())
+            # Add nodes
+            for i in range(self.size):
+                for j in range(i + 1):
 
+                    # Add node
+                    G.add_node((i, j))
 
+                    # Split filled/unfilled nodes into different lists to apply different colors
+                    if self.grid[i][j] == 0:
+                        blue_nodes.append((i, j))
+                    else:
+                        red_nodes.append((i, j))
 
-    print('Actions:')
-    pa = board.get_possible_actions()
-    for i in pa:
-        print(i)
+                    # Add edges
+                    if i > 0 and j < i:
+                        G.add_edge((i - 1, j), (i, j))
+                    if j > 0:
+                        G.add_edge((i, j - 1), (i, j))
+                    if i > 0 and j > 0:
+                        G.add_edge((i - 1, j - 1), (i, j))
 
-    action = [[1, 1], [2, 2], [3, 3]]
-    print('Excecuting action, ', action)
-    board.execute_action(action)
+                    # Add positions
+                    positions[(i, j)] = (((i + j) * 0.8), i - j)  # Works like coordinate system
 
-    board.print_board()
-
-    board.visualize_board()
-
-
-
+            # draw network
+            nx.draw_networkx_nodes(G, positions, nodelist=blue_nodes, node_color='b')
+            nx.draw_networkx_nodes(G, positions, nodelist=red_nodes, node_color='r')
+            nx.draw_networkx_edges(G, positions)
+            plt.show()
