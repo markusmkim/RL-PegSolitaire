@@ -2,14 +2,14 @@ from Agent.actor import Actor
 from Agent.critic import Critic
 from SimWorld.peg_player import PegPlayer
 from SimWorld.peg_board import PegBoard
-from SimWorld.helpers import get_all_possible_states_from_initial_state
+from SimWorld.helpers import get_all_possible_states_from_initial_state, convert_list_to_string, get_possible_actions, get_all_possible_states
 from SimWorld.board_visualizer import visualize_board
 
 from time import sleep
 
 
-is_diamond = True
-size = 3
+is_diamond = False
+size = 4
 empty_nodes = [[0, 0]]
 number_of_episodes = 1000
 
@@ -32,15 +32,27 @@ display = False
 display_delay = 1.5  # seconds
 
 
-# run
+# Run
 peg_board = PegBoard(size, is_diamond, empty_nodes)
 peg_player = PegPlayer(peg_board)
 
-s = get_all_possible_states_from_initial_state(peg_board.grid)
+
+
+#s = get_all_possible_states_from_initial_state(convert_list_to_string(peg_board.grid))
+#print('Antall mulige states: ', len(s))
+#print(get_possible_actions(convert_list_to_string(peg_board.grid)))
+"""
 for grid in s:
     visualize_board(grid)
     # print('main- grid: ', grid)
     sleep(1.5)
+"""
+
+print(len(get_all_possible_states(True, 4)))
+# Initialize actor and critic
+#actor = Actor()
+#critic = Critic()
+
 
 
 
