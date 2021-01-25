@@ -1,4 +1,4 @@
-from Helpers.helpers import create_diamond_grid, create_triangle_grid
+from Helpers.initializers import create_diamond_grid, create_triangle_grid
 
 
 class PegBoard:
