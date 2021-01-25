@@ -42,10 +42,34 @@ def visualize_board(grid):
         G.add_nodes_from(dummy_nodes)
         positions['dummy_node_1'] = (-1, 0)
         positions['dummy_node_2'] = ((len(grid) * 2) - 1, 0)
-        # nx.draw_networkx_nodes(G, positions, nodelist=dummy_nodes, node_color='w')  # Dummy nodes are white/invisible
+        nx.draw_networkx_nodes(G, positions, nodelist=dummy_nodes, node_color='w')  # Dummy nodes are white/invisible
 
     # Draw network
     nx.draw_networkx_nodes(G, positions, nodelist=blue_nodes, node_color='b')
     nx.draw_networkx_nodes(G, positions, nodelist=red_nodes, node_color='r')
     nx.draw_networkx_edges(G, positions)
+    plt.show()
+
+
+def plot_mean_values(values):
+    x_axis = []
+    mean_values = []
+
+    for i in range(len(values) // 100):
+        mean = 0
+        for j in range(100):
+            mean += values[i*100 + j]
+        mean_values.append(mean/100)
+
+    for i in range(len(mean_values)):
+        x_axis.append(i)
+    plt.plot(x_axis, mean_values)
+    plt.show()
+
+
+def plot_values(values):
+    x_axis = []
+    for i in range(len(values)):
+        x_axis.append(i)
+    plt.plot(x_axis, values)
     plt.show()

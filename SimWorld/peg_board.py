@@ -1,4 +1,4 @@
-from SimWorld.helpers import create_diamond_grid, create_triangle_grid
+from Helpers.helpers import create_diamond_grid, create_triangle_grid
 
 
 class PegBoard:
@@ -16,7 +16,7 @@ class PegBoard:
         # node value of 1 represents a peg, while a node value of 0 represents an empty node (hole)
         if is_diamond:
             self.grid = create_diamond_grid(size, empty_nodes)
-            self.total_pegs_left = (size - 1) * (size - 1) - len(empty_nodes)
+            self.total_pegs_left = size * size - len(empty_nodes)
         else:
             self.grid = create_triangle_grid(size, empty_nodes)
             self.total_pegs_left = (size * (size + 1)) / 2 - len(empty_nodes)

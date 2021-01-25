@@ -1,31 +1,4 @@
-
-
-# Static initializer of a triangle shaped grid
-def create_triangle_grid(size, empty_nodes):
-    grid = []
-    for i in range(size):
-        row = []
-        for j in range(i + 1):
-            if [i, j] in empty_nodes:
-                row.append(0)
-            else:
-                row.append(1)
-        grid.append(row)
-    return grid
-
-
-# Static initializer of a diamond shaped grid
-def create_diamond_grid(size, empty_nodes):
-    grid = []
-    for i in range(size):
-        row = []
-        for j in range(size):
-            if [i, j] in empty_nodes:
-                row.append(0)
-            else:
-                row.append(1)
-        grid.append(row)
-    return grid
+from Helpers.converters import convert_list_to_string, convert_string_to_list
 
 
 # Returns the next state of the board after the provided action is taken. State is string.
@@ -36,28 +9,6 @@ def next_state(state, action):
     grid[move[1][0]][move[1][1]] = 0
     grid[move[2][0]][move[2][1]] = 1
     return convert_list_to_string(grid)
-
-
-# Used to convert list representations of states and actions to string representations
-def convert_list_to_string(lst):
-    s = ""
-    for row in lst:
-        for element in row:
-            s += str(element)
-        s += ","
-    return s[:-1]
-
-
-# Used to convert string representations of states and actions to list representations
-def convert_string_to_list(string):
-    lst = []
-    rows = string.split(",")
-    for row_string in rows:
-        row = []
-        for element in row_string:
-            row.append(int(element))
-        lst.append(row)
-    return lst
 
 
 # Returns all possible actions for the current board
@@ -116,6 +67,7 @@ def get_possible_actions(state):
     return possible_actions
 
 
+"""
 def get_all_possible_states(is_diamond, size):
     states = []
     if is_diamond:
@@ -160,3 +112,4 @@ def get_all_possible_states_from_initial_state(initial_state):
                 edges_to_explore.append((new_node, edge))
 
     return tree  # list(set(tree))
+"""
