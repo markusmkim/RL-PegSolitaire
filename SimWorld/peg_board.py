@@ -3,7 +3,7 @@ from SimWorld.helpers import create_diamond_grid, create_triangle_grid
 
 class PegBoard:
 
-    def __init__(self, size, is_diamond, empty_nodes, target_nodes=False):
+    def __init__(self, size, is_diamond, empty_nodes):
 
         # The size of the board is decided by the number of nodes at each edge of the board,
         # and ranges from 4 to 8 for triangles and 3 to 6 for diamonds by the task description
@@ -21,11 +21,9 @@ class PegBoard:
             self.grid = create_triangle_grid(size, empty_nodes)
             self.total_pegs_left = (size * (size + 1)) / 2 - len(empty_nodes)
 
-    # Executes the provided action on the current board
-    def execute_action(self, action):
-        self.grid[action[0][0]][action[0][1]] = 0
-        self.grid[action[1][0]][action[1][1]] = 0
-        self.grid[action[2][0]][action[2][1]] = 1
+    # Executes the provided move on the current board
+    def execute_move(self, move):
+        self.grid[move[0][0]][move[0][1]] = 0
+        self.grid[move[1][0]][move[1][1]] = 0
+        self.grid[move[2][0]][move[2][1]] = 1
         self.total_pegs_left -= 1
-
-

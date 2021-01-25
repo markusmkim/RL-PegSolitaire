@@ -22,17 +22,14 @@ class Actor:
 
         self.state_action_history = []
 
-
     def reset_eligibilities(self):
         for state in self.table:
             for action in state:
                 self.table[state][action]['eligibility'] = 0
 
-
     def update_eligibility(self, state, action):
         self.table[state][action]['eligibility'] = 1
         self.state_action_history.append([state, action])
-
 
     def choose_action(self, state):
         possible_actions = self.table[state].keys()
@@ -51,9 +48,8 @@ class Actor:
 
         return possible_actions[best_action_index]
 
-
     def update_values_and_eligibilities(self, TD_error):
-        for state_action in self.state_history:
+        for state_action in self.state_action_history:
             state = state_action[0]
             action = state_action[1]
 
@@ -69,12 +65,3 @@ class Actor:
 
             for action in self.table[state]:
                 self.table[state][action]['probability'] = self.table[state][action]['probability'] / total_prob
-
-
-
-
-
-
-
-
-

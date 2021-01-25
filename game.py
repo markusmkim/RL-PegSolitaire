@@ -36,11 +36,9 @@ display_delay = 1.5  # seconds
 peg_board = PegBoard(size, is_diamond, empty_nodes)
 peg_player = PegPlayer(peg_board)
 
-
-
-#s = get_all_possible_states_from_initial_state(convert_list_to_string(peg_board.grid))
-#print('Antall mulige states: ', len(s))
-#print(get_possible_actions(convert_list_to_string(peg_board.grid)))
+# s = get_all_possible_states_from_initial_state(convert_list_to_string(peg_board.grid))
+# print('Antall mulige states: ', len(s))
+# print(get_possible_actions(convert_list_to_string(peg_board.grid)))
 """
 for grid in s:
     visualize_board(grid)
@@ -50,13 +48,7 @@ for grid in s:
 
 print(len(get_all_possible_states(True, 4)))
 # Initialize actor and critic
-#actor = Actor()
-#critic = Critic()
-
-
-
-
-#actor = Actor(states, get_possible_actions, actor_learning_rate, actor_discount_factor, actor_eligibility_decay_rate, epsilon, epsilon_decay_rate)
-#critic = Critic(states, critic_learning_rate, critic_discount_factor, critic_eligibility_decay_rate)
-
-
+# actor = Actor()
+# critic = Critic()
+# actor = Actor(states, get_possible_actions, actor_learning_rate, actor_discount_factor, actor_eligibility_decay_rate, epsilon, epsilon_decay_rate)
+# critic = Critic(states, critic_learning_rate, critic_discount_factor, critic_eligibility_decay_rate)

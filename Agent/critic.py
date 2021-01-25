@@ -18,27 +18,20 @@ class Critic:
 
         self.state_history = []
 
-
     def reset_eligibilities(self):
         for state in self.table:
             self.table[state]['eligibility'] = 0
-
 
     def update_eligibility(self, state):
         self.table[state]['eligibility'] = 1
         self.state_history.append(state)
 
-
     def get_TD_error(self, current_state, next_state, reward):
         return reward + self.discount_factor * self.table[next_state]['value'] - self.table[current_state]['value']
 
-
-    def update_values_and_eligibilities(self, TD_error):
+    def update_values_and_eligibilities(self, td_error):
         for state in self.state_history:
             self.table[state] = {
-                'value': self.table[state]['value'] + self.learning_rate * TD_error * self.table[state]['eligibility'],
+                'value': self.table[state]['value'] + self.learning_rate * td_error * self.table[state]['eligibility'],
                 'eligibility': self.discount_factor * self.eligibility_decay_rate * self.table[state]['eligibility']
             }
-
-
-

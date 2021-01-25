@@ -1,5 +1,5 @@
 import random
-from SimWorld.helpers import get_possible_actions
+from SimWorld.helpers import get_possible_actions, convert_string_to_list
 
 
 class PegPlayer:
@@ -15,11 +15,8 @@ class PegPlayer:
 
     # Executes the provided action on the current board
     def execute_action(self, action):
-        self.peg_board.execute_action(action)
+        self.peg_board.execute_action(convert_string_to_list(action))
 
     # Return if the game of solitaire is won or not
     def has_won(self):
         return self.peg_board.total_pegs_left == 1
-
-
-
