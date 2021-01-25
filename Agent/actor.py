@@ -30,7 +30,7 @@ class Actor:
         self.table[state][action]['eligibility'] = 1
         self.state_action_history.append([state, action])
 
-    def set_epsilon(self):
+    def set_epsilon_to_zero(self):
         self.epsilon = 0
 
     def choose_action(self, state):
