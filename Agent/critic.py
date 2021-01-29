@@ -8,7 +8,7 @@ class Critic:
         self.table = {}
         self.state_history = []
 
-    def reset_eligibilities_and_history(self):
+    def reset_episode_parameters(self):
         self.state_history = []
         for state in self.table:
             self.table[state]['eligibility'] = 0

@@ -14,24 +14,24 @@ class Actor:
         self.table = {}
         self.state_action_history = []
 
-    def reset_eligibilities_and_history(self):
 
+    def reset_episode_parameters(self):
         # Epsilon decay
         self.epsilon = self.epsilon * self.epsilon_decay_rate
-
-        print(self.epsilon)
         self.state_action_history = []
-
         for state in self.table:
             for action in self.table[state]:
                 self.table[state][action]['eligibility'] = 0
+
 
     def set_eligibility(self, state, action):
         self.table[state][action]['eligibility'] = 1
         self.state_action_history.append([state, action])
 
+
     def set_epsilon_to_zero(self):
         self.epsilon = 0
+
 
     def choose_action(self, state):
         if state not in self.table:

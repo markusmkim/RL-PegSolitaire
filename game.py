@@ -1,13 +1,14 @@
 from LearningAlgorithm.actor_critic import ActorCriticAlgorithm
+from Agent.netwrok_critic import NetworkCritic
 
 
 is_diamond = True
 size = 4
 empty_nodes = [[1, 1]]
-number_of_episodes = 500
+number_of_episodes = 800
 
-critic_table = True
-critic_neural_network_dimensions = 0
+critic_table = False
+critic_neural_network_dimensions = [4, 2, 1]
 
 actor_learning_rate = 0.1
 critic_learning_rate = 0.1
@@ -48,5 +49,7 @@ algorithm.run(display_all_games, number_of_episodes)
 algorithm.plot_results()
 
 # run one episode with visualization and epsilon = 0
-algorithm.run(True, 1)
+algorithm.run(True, 1, True)
+
+
 
