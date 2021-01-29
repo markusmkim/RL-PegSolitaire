@@ -20,14 +20,14 @@ class NetworkCritic:
     def build_model(self):
         model = keras.Sequential()
         first_layer = self.layers[0]
-        model.add(keras.layers.Dense(first_layer, activation='relu'))
-        #model.add(keras.layers.Input(shape=(16, )))
+        model.add(keras.layers.Dense(first_layer, activation='relu', input_shape=(self.input_dim, )))
+        # model.add(keras.layers.Input(shape=(16, )))
         for layer in self.layers[1:-1]:
             model.add(keras.layers.Dense(layer, activation='relu'))
         last_layer = self.layers[-1]
         model.add(keras.layers.Dense(last_layer))
         loss = keras.losses.MeanSquaredError()
-        model.build((None, 16))
+        # model.build((None, 16))
         model.compile(optimizer='adam', loss=loss)
         return model
 
@@ -40,10 +40,13 @@ class NetworkCritic:
             row_dim = layer
             matrix = np.zeros((col_dim, row_dim))
             eligibilities.append(matrix)
-            col_dim = row_dim
 
-            # bias weights
-            eligibilities.append(np.zeros(layer))
+            # bias
+            bias = np.zeros(layer)
+            eligibilities.append(bias)
+
+            # this layers row dimension is next layers column dimension
+            col_dim = row_dim
 
         self.eligibilities = eligibilities
 
@@ -55,20 +58,21 @@ class NetworkCritic:
 
 
     def find_value(self, state):
-        #print(self.model.summary())
         input_state = convert_string_to_list(state.replace(',', ''))[0]
 
-        input_state = np.array(input_state)
-        # input_state = tf.shape(input_state)
-        print(input_state)
+        input_state = np.array([input_state])
         predictions = self.model(input_state)
+
         return predictions
 
 
     def update_model_and_eligibilities(self, state, target, td_error):
         features = convert_string_to_list(state.replace(',', ''))[0]
         self.fit(features, target, td_error)  # train
-        self.eligibilities = self.eligibilities * self.eligibility_decay_rate  # decay eligibilities
+
+        # decay eligibilities
+        for element in self.eligibilities:
+            element = element * self.eligibility_decay_rate
 
 
     def fit(self, features, target, td_error, epochs=1, mbs=1, vfrac=0.1, verbosity=1, callbacks=[]):
@@ -77,27 +81,38 @@ class NetworkCritic:
         with tf.GradientTape() as tape:
             loss = self.gen_loss(features, target, avg=False)
             gradients = tape.gradient(loss, params)
-            gradients = self.modify_gradients(gradients, td_error)
-            self.model.optimizer.apply_gradients(zip(gradients, params))
+            #print('Gradients:   ', gradients)
+
+            gradients_2 = self.modify_gradients(gradients, td_error)
+            #print('Gradients 2: ', gradients_2)
+
+            self.model.optimizer.apply_gradients(zip(gradients_2, params))
 
 
     # This returns a tensor of losses, OR the value of the averaged tensor.  Note: use .numpy() to get the
     # value of a tensor.
     def gen_loss(self, features, targets, avg=False):
-        features = np.array(features)
-        print('f', features)
+        features = np.array([features])
         predictions = self.model(features)  # Feed-forward pass to produce outputs/predictions
         loss = self.model.loss(targets, predictions)  # model.loss = the loss function
         return tf.reduce_mean(loss).numpy() if avg else loss
 
 
     def modify_gradients(self, gradients, td_error):
+        # print('Old gradients: ', gradients)
+        # print('Eligibilities:', self.eligibilities)
         modified_gradients = []
         for i in range(len(gradients)):
             self.eligibilities[i] = np.add(self.eligibilities[i], gradients[i])
-            modified_gradients_matrix = self.eligibilities[i] * td_error * (- 1)
+
+            if i % 2 == 1:  # if bias tensor of shape (1, x), we need tensor of shape (x, )
+                modified_gradients_matrix = (self.eligibilities[i] * -td_error)[0]
+            else:  # else this is weight tensor  ===>  shape is fine
+                modified_gradients_matrix = self.eligibilities[i] * -td_error
+
             modified_gradients.append(modified_gradients_matrix)
 
+        # print('Gradients:     ', modified_gradients)
         return modified_gradients
 
 

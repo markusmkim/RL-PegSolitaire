@@ -113,6 +113,7 @@ class ActorCriticAlgorithm:
                     visualize_board(convert_string_to_list(state))
 
             self.total_pegs_left_per_episode.append(peg_board.total_pegs_left)
+            print('Episode ', i, ' done')
 
     def plot_results(self):
         plot_values(self.total_pegs_left_per_episode)
