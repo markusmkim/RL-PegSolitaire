@@ -63,7 +63,7 @@ class NetworkCritic:
         input_state = np.array([input_state])
         predictions = self.model(input_state)
 
-        return predictions
+        return predictions.numpy()[0][0]
 
 
     def update_model_and_eligibilities(self, state, target, td_error):
@@ -71,8 +71,8 @@ class NetworkCritic:
         self.fit(features, target, td_error)  # train
 
         # decay eligibilities
-        for element in self.eligibilities:
-            element = element * self.eligibility_decay_rate
+        for i in range(len(self.eligibilities)):
+            self.eligibilities[i] = self.eligibilities[i] * self.eligibility_decay_rate
 
 
     def fit(self, features, target, td_error, epochs=1, mbs=1, vfrac=0.1, verbosity=1, callbacks=[]):
@@ -81,10 +81,8 @@ class NetworkCritic:
         with tf.GradientTape() as tape:
             loss = self.gen_loss(features, target, avg=False)
             gradients = tape.gradient(loss, params)
-            #print('Gradients:   ', gradients)
 
             gradients_2 = self.modify_gradients(gradients, td_error)
-            #print('Gradients 2: ', gradients_2)
 
             self.model.optimizer.apply_gradients(zip(gradients_2, params))
 
@@ -99,20 +97,20 @@ class NetworkCritic:
 
 
     def modify_gradients(self, gradients, td_error):
-        # print('Old gradients: ', gradients)
-        # print('Eligibilities:', self.eligibilities)
+        #print('Old gradients: ', gradients)
+        #print('Eligibilities:', self.eligibilities)
         modified_gradients = []
         for i in range(len(gradients)):
             self.eligibilities[i] = np.add(self.eligibilities[i], gradients[i])
 
-            if i % 2 == 1:  # if bias tensor of shape (1, x), we need tensor of shape (x, )
-                modified_gradients_matrix = (self.eligibilities[i] * -td_error)[0]
-            else:  # else this is weight tensor  ===>  shape is fine
-                modified_gradients_matrix = self.eligibilities[i] * -td_error
+            #if i % 2 == 1:  # if bias tensor of shape (1, x), we need tensor of shape (x, )
+            #    modified_gradients_matrix = (self.eligibilities[i] * -td_error)[0]
+            #else:  # else this is weight tensor  ===>  shape is fine
+            modified_gradients_matrix = self.eligibilities[i] * -td_error
 
             modified_gradients.append(modified_gradients_matrix)
 
-        # print('Gradients:     ', modified_gradients)
+        #print('Gradients:     ', modified_gradients)
         return modified_gradients
 
 

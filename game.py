@@ -2,10 +2,10 @@ from LearningAlgorithm.actor_critic import ActorCriticAlgorithm
 from Agent.netwrok_critic import NetworkCritic
 
 
-is_diamond = True
-size = 4
-empty_nodes = [[1, 1]]
-number_of_episodes = 600
+is_diamond = False
+size = 5
+empty_nodes = [[2, 2]]
+number_of_episodes = 800
 
 critic_table = False
 critic_neural_network_dimensions = [4, 2, 1]
