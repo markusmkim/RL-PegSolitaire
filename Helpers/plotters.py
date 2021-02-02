@@ -63,6 +63,7 @@ def plot_mean_values(values):
 
     for i in range(len(mean_values)):
         x_axis.append(i)
+
     plt.plot(x_axis, mean_values)
     plt.show()
 

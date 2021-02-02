@@ -1,4 +1,3 @@
-import math
 import tensorflow as tf
 from tensorflow import keras
 import numpy as np
@@ -18,7 +17,6 @@ class NetworkCritic:
 
 
     def build_model(self):
-        print(self.input_dim)
         model = keras.Sequential()
         first_layer = self.layers[0]
         model.add(keras.layers.Dense(first_layer, activation='relu', input_shape=(self.input_dim, )))
@@ -82,9 +80,7 @@ class NetworkCritic:
         with tf.GradientTape() as tape:
             loss = self.gen_loss(features, target, avg=False)
             gradients = tape.gradient(loss, params)
-
             gradients_2 = self.modify_gradients(gradients, td_error)
-
             self.model.optimizer.apply_gradients(zip(gradients_2, params))
 
 

@@ -1,6 +1,6 @@
 from Agent.actor import Actor
 from Agent.critic import Critic
-from Agent.netwrok_critic import NetworkCritic
+from Agent.network_critic import NetworkCritic
 from SimWorld.peg_player import PegPlayer
 from SimWorld.peg_board import PegBoard
 from Helpers.helpers import get_possible_actions
