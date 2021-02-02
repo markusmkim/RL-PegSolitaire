@@ -4,14 +4,14 @@ from Agent.netwrok_critic import NetworkCritic
 
 is_diamond = False
 size = 5
-empty_nodes = [[2, 2]]
-number_of_episodes = 800
+empty_nodes = [[2, 1]]
+number_of_episodes = 700
 
 critic_table = False
-critic_neural_network_dimensions = [4, 2, 1]
+critic_neural_network_dimensions = [10, 5, 1]
 
 actor_learning_rate = 0.1
-critic_learning_rate = 0.1
+critic_learning_rate = 0.1 if critic_table else 0.01
 
 actor_eligibility_decay_rate = 0.9
 critic_eligibility_decay_rate = 0.9

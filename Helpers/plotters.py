@@ -10,7 +10,7 @@ def visualize_board(grid):
 
     # Add nodes
     for i in range(len(grid)):
-        for j in range(len(grid)):
+        for j in range(len(grid) if len(grid[0]) > 1 else i + 1):
 
             # Add node
             G.add_node((i, j))
