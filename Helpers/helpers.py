@@ -18,7 +18,7 @@ def get_possible_actions(state):
     size = len(grid)
 
     for i in range(size):
-        for j in range(size):
+        for j in range(size if len(grid[0]) > 1 else i + 1):
             if grid[i][j] == 1:
                 if len(grid[0]) > 1:  # Grid is diamond shaped
 

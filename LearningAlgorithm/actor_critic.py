@@ -47,7 +47,7 @@ class ActorCriticAlgorithm:
                                  critic_discount_factor,
                                  critic_eligibility_decay_rate)
         else:
-            input_dim = size**2 if is_diamond else (size * (size + 1)) / 2
+            input_dim = size**2 if is_diamond else (size * (size + 1)) // 2
             self.critic = NetworkCritic(input_dim,
                                         critic_neural_network_dimensions,
                                         critic_learning_rate,

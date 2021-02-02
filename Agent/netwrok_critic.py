@@ -18,6 +18,7 @@ class NetworkCritic:
 
 
     def build_model(self):
+        print(self.input_dim)
         model = keras.Sequential()
         first_layer = self.layers[0]
         model.add(keras.layers.Dense(first_layer, activation='relu', input_shape=(self.input_dim, )))
