@@ -13,7 +13,7 @@ class PegPlayer:
             if self.has_won():
                 reward = 100  # table critic works ok with 50
             else:
-                reward = 20 - 2*self.peg_board.total_pegs_left
+                reward = 0  # 20 - 2*self.peg_board.total_pegs_left
         return convert_list_to_string(self.peg_board.grid), reward
 
     # Return if the game of solitaire is won or not
