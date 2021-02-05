@@ -44,6 +44,9 @@ class Actor:
 
         possible_actions = list(self.table[state].keys())
 
+        if len(possible_actions) == 0:
+            return None
+
         if random.random() < self.epsilon:
             random_index = random.randrange(len(self.table[state]))
 

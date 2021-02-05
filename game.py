@@ -1,29 +1,26 @@
-from LearningAlgorithm.actor_critic import ActorCriticAlgorithm
-from Agent.network_critic import NetworkCritic
+from LearningAlgorithm.actor_critic_algorithm import ActorCriticAlgorithm
+
+# configs
+from configs.triangle_5_table import config as triangle_5_table_config
+from configs.diamond_4_table import config as diamond_4_table
+from configs.diamond_4_network import config as diamond_4_network
 
 
-is_diamond = True
-size = 4
-empty_nodes = [[1, 1]]
-number_of_episodes = 400
+config = diamond_4_network
 
-critic_table = True
-critic_neural_network_dimensions = [10, 5, 1]
+algorithm = ActorCriticAlgorithm(config)
 
-actor_learning_rate = 0.1
-critic_learning_rate = 0.1 if critic_table else 0.01
 
-actor_eligibility_decay_rate = 0.9
-critic_eligibility_decay_rate = 0.9
+# run training
+algorithm.run()
 
-actor_discount_factor = 0.9
-critic_discount_factor = 0.9
+# plot results from training
+algorithm.plot_results()
 
-epsilon = 0.5
-epsilon_decay_rate = number_of_episodes / (number_of_episodes + 2)
 
-display_all_games = False
-display_delay = 1.5  # seconds
+
+
+"""
 
 
 algorithm = ActorCriticAlgorithm(is_diamond,
@@ -40,16 +37,24 @@ algorithm = ActorCriticAlgorithm(is_diamond,
                                  epsilon,
                                  epsilon_decay_rate,
                                  display_delay)
+is_diamond = True
+size = 4
+empty_nodes = [[1, 1]]
+number_of_episodes = 600
+critic_table = False
+critic_neural_network_dimensions = [32, 1]
+actor_learning_rate = 0.2
+critic_learning_rate = 0.1 if critic_table else 0.00001
+actor_eligibility_decay_rate = 0.9
+critic_eligibility_decay_rate = 0.9
+actor_discount_factor = 0.9
+critic_discount_factor = 0.9 if critic_table else 0.99
+epsilon = 0.5
+epsilon_decay_rate = number_of_episodes / (number_of_episodes + 2)
+display_delay = 1  # seconds
+display_all_games = False
+"""
 
-
-# run training
-algorithm.run(display_all_games, number_of_episodes)
-
-# plot results from training
-algorithm.plot_results()
-
-# run one episode with visualization and epsilon = 0
-algorithm.run(True, 1, True)
 
 
 

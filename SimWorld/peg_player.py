@@ -11,7 +11,7 @@ class PegPlayer:
         reward = 0
         if self.game_over():
             if self.has_won():
-                reward = 50
+                reward = 100  # table critic works ok with 50
             else:
                 reward = 20 - 2*self.peg_board.total_pegs_left
         return convert_list_to_string(self.peg_board.grid), reward

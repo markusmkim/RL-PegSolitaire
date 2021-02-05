@@ -27,7 +27,9 @@ class NetworkCritic:
         model.add(keras.layers.Dense(last_layer))
         loss = keras.losses.MeanSquaredError()
         # model.build((None, 16))
-        model.compile(optimizer='adam', loss=loss)
+        optimizer = keras.optimizers.Adam(learning_rate=self.learning_rate)
+        model.compile(optimizer=optimizer, loss=loss)
+        print(model.summary())
         return model
 
 
