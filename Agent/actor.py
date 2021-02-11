@@ -32,6 +32,8 @@ class Actor:
     def set_epsilon_to_zero(self):
         self.epsilon = 0
 
+    def reset_epsilon(self, epsilon):
+        self.epsilon = epsilon
 
     def choose_action(self, state):
         if state not in self.table:

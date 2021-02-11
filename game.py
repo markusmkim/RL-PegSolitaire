@@ -6,18 +6,23 @@ from configs.diamond_4_table import config as diamond_4_table
 from configs.diamond_4_network import config as diamond_4_network
 
 
-config = diamond_4_network
+config = diamond_4_table
 
 algorithm = ActorCriticAlgorithm(config)
 
+algorithm.evaluate_config(5, 4, ['actor_learning_rate', 'critic_learning_rate'], {
+    'actor_learning_rate': [0.1, 0.3, 0.5, 0.7],
+    'critic_learning_rate': [0.1, 0.3, 0.5, 0.7]
+})
 
 # run training
-algorithm.run()
+# algorithm.run()
 
 # plot results from training
-algorithm.plot_results()
+# algorithm.plot_results()
 
-
+# plots when and how many times the game is one during the run
+# algorithm.plot_wins()
 
 
 """

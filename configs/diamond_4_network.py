@@ -5,8 +5,8 @@ config = {
     'size': 4,
     # [[1, 1]] and [[2, 2]] solvable boards
     'empty_nodes': [[1, 1]],
-    'number_of_episodes': 800,
-    'critic_table': False,
+    'number_of_episodes': 2000,
+    'critic_table': True,
     'critic_neural_network_dimensions': [32, 16, 1],
     'actor_learning_rate': 0.01,
     'critic_learning_rate': 0.00001,
