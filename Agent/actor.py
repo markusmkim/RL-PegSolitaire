@@ -54,17 +54,11 @@ class Actor:
             return possible_actions[random_index]
 
         best_action_index = 0
-        highest_probability = 0
+        highest_probability = -10000000
         for index, action in enumerate(self.table[state]):
             if self.table[state][action]['probability'] > highest_probability:
                 best_action_index = index
                 highest_probability = self.table[state][action]['probability']
-
-        ## prøver meg på en lite tin her
-        #if highest_probability == 0:
-        #    random_index = random.randrange(len(self.table[state]))
-        #    return possible_actions[random_index]
-        ##
 
         return possible_actions[best_action_index]
 

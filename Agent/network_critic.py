@@ -20,13 +20,11 @@ class NetworkCritic:
         model = keras.Sequential()
         first_layer = self.layers[0]
         model.add(keras.layers.Dense(first_layer, activation='relu', input_shape=(self.input_dim, )))
-        # model.add(keras.layers.Input(shape=(16, )))
         for layer in self.layers[1:-1]:
             model.add(keras.layers.Dense(layer, activation='relu'))
         last_layer = self.layers[-1]
         model.add(keras.layers.Dense(last_layer))
         loss = keras.losses.MeanSquaredError()
-        # model.build((None, 16))
         optimizer = keras.optimizers.Adam(learning_rate=self.learning_rate)
         model.compile(optimizer=optimizer, loss=loss)
         print(model.summary())

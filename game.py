@@ -15,7 +15,7 @@ from configs.triangle_4_network import config as triangle_4_network
 from configs.custom import config as custom_config
 
 
-config = custom_config
+config = triangle_5_network
 
 algorithm = ActorCriticAlgorithm(config)
 
