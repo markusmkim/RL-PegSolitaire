@@ -1,9 +1,8 @@
 
 
 config = {
-    'is_diamond': True,
+    'is_diamond': False,
     'size': 4,
-    # [[1, 1]] and [[2, 2]] solvable boards
     'empty_nodes': [[1, 1]],
     'number_of_episodes': 1000,
     'reward_win': 10000000,
@@ -22,7 +21,3 @@ config = {
     'display_delay': 0.1,
     'display_games': "last"  # "all" | "last" | None
 }
-
-"""
-
-"""

@@ -46,7 +46,7 @@ class ActorCriticAlgorithm:
         for i in range(self.config['number_of_episodes']):
             print(self.actor.epsilon)
             peg_board = PegBoard(self.config['size'], self.config['is_diamond'], self.config['empty_nodes'])
-            peg_player = PegPlayer(peg_board)
+            peg_player = PegPlayer(peg_board, self.config['reward_win'], self.config['reward_lose'])
 
             # whether this episode should be displayed or not
             display = self.config['display_games'] == "all" or (
@@ -165,8 +165,8 @@ class ActorCriticAlgorithm:
 
             for run in range(runs):
 
-                if number_of_parameter_values == 1:
-                    print("Run: ", run)
+                #if number_of_parameter_values == 1:
+                print("Run: ", run)
 
                 # number of wins per run
                 number_of_wins = 0
@@ -182,7 +182,7 @@ class ActorCriticAlgorithm:
 
                 for i in range(self.config['number_of_episodes']):
                     peg_board = PegBoard(self.config['size'], self.config['is_diamond'], self.config['empty_nodes'])
-                    peg_player = PegPlayer(peg_board)
+                    peg_player = PegPlayer(peg_board, self.config['reward_win'], self.config['reward_lose'])
 
                     # set epsilon to zero for last episode if desired
                     if i == self.config['number_of_episodes'] - 1:

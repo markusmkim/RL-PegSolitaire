@@ -51,7 +51,6 @@ class Actor:
 
         if random.random() < self.epsilon:
             random_index = random.randrange(len(self.table[state]))
-
             return possible_actions[random_index]
 
         best_action_index = 0
@@ -61,7 +60,14 @@ class Actor:
                 best_action_index = index
                 highest_probability = self.table[state][action]['probability']
 
+        ## prøver meg på en lite tin her
+        #if highest_probability == 0:
+        #    random_index = random.randrange(len(self.table[state]))
+        #    return possible_actions[random_index]
+        ##
+
         return possible_actions[best_action_index]
+
 
     def update_values_and_eligibilities(self, td_error):
 
@@ -80,6 +86,7 @@ class Actor:
                     self.table[state][action]['eligibility']
             }
 
+            """
             # Normalize probabilities for possible actions from state
             total_prob = 0
             for action in self.table[state]:
@@ -88,3 +95,4 @@ class Actor:
             if total_prob > 0:
                 for action in self.table[state]:
                     self.table[state][action]['probability'] = self.table[state][action]['probability'] / total_prob
+            """
