@@ -6,8 +6,6 @@ from SimWorld.peg_board import PegBoard
 from Helpers.helpers import get_possible_actions
 from Helpers.converters import convert_list_to_string, convert_string_to_list
 from Helpers.plotters import visualize_board, plot_values, plot_mean_values
-import numpy as np
-
 from time import sleep
 
 
@@ -45,6 +43,7 @@ class ActorCriticAlgorithm:
 
         for i in range(self.config['number_of_episodes']):
             print(self.actor.epsilon)
+            # initialize SimWorld: PegBoard and PegPlayer
             peg_board = PegBoard(self.config['size'], self.config['is_diamond'], self.config['empty_nodes'])
             peg_player = PegPlayer(peg_board, self.config['reward_win'], self.config['reward_lose'])
 
@@ -56,8 +55,13 @@ class ActorCriticAlgorithm:
             if self.config['epsilon_zero_on_last_episode'] and i == self.config['number_of_episodes'] - 1:
                 self.actor.set_epsilon_to_zero()
 
+            # get initial state
             state = convert_list_to_string(peg_board.grid)
+
+            # Actor: choose first action
             action = self.actor.choose_action(state)
+
+            # if action == None --> no legal actions for this board configuration
             if not action:
                 print('No legal actions!')
                 break
@@ -65,20 +69,26 @@ class ActorCriticAlgorithm:
             if display:
                 visualize_board(convert_string_to_list(state))
 
-            self.actor.reset_episode_parameters()
+            # reset eligibilities
+            self.actor.reset_episode_parameters()  # this method will also decrease epsilon
             self.critic.reset_episode_parameters()
 
             while not peg_player.game_over():
+                # set eligibilities to 1 for current state (and action for actor). For critic, only if table based.
                 self.actor.set_eligibility(state, action)
                 if self.config['critic_table']:
                     self.critic.set_eligibility(state)
 
+                # execute action, receive next state and reward from PegPlayer in SimWorld
                 next_state, reward = peg_player.execute_action(action)
+
+                # Actor: choose next action if game is not over
                 if not peg_player.game_over():
                     next_action = self.actor.choose_action(next_state)
                 else:
                     next_action = None
 
+                # Critic: compute TD error and update values/model and eligibilities
                 if self.config['critic_table']:
                     td_error = self.critic.get_TD_error(state, next_state, reward)
                     self.critic.update_values_and_eligibilities(td_error)
@@ -86,19 +96,23 @@ class ActorCriticAlgorithm:
                     target, td_error = self.critic.get_target_and_TD_error(state, next_state, reward)
                     self.critic.update_model_and_eligibilities(state, target, td_error)
 
+                # Actor: use TD error to update SAP values and eligibilities
                 self.actor.update_values_and_eligibilities(td_error)
 
                 state = next_state
                 action = next_action
 
+                # visualize game is display flag is True
                 if display:
                     sleep(self.config['display_delay'])
                     visualize_board(convert_string_to_list(state))
 
+            # save result for plotting
             self.total_pegs_left_per_episode.append(peg_board.total_pegs_left)
+
+            # print result if last episode
             if i == self.config['number_of_episodes'] - 1:
-                print('total pegs left last episode - ', peg_board.total_pegs_left)
-            # print('Episode ', i, ' done')
+                print('Total pegs left last episode - ', peg_board.total_pegs_left)
 
 
     def plot_results(self):
@@ -106,6 +120,7 @@ class ActorCriticAlgorithm:
         sleep(self.config['display_delay'])
         plot_mean_values(self.total_pegs_left_per_episode)
         sleep(self.config['display_delay'])
+
 
     def plot_wins(self):
         episodes_won = []
@@ -117,8 +132,8 @@ class ActorCriticAlgorithm:
         print("Antall seire: ", len(episodes_won))
         print("Episoder vunnet: ", episodes_won)
 
-    def evaluate_config(self, runs, number_of_parameter_values=1, parameters=None, parameter_values=None):
 
+    def evaluate_config(self, runs, number_of_parameter_values=1, parameters=None, parameter_values=None):
         # If parameters are provided, this function aims to compare
         # evaluations with different values for provided parameter.
         # The specific parameters of most interest are:
@@ -164,7 +179,6 @@ class ActorCriticAlgorithm:
             mean_pegs_last_100_history = []
 
             for run in range(runs):
-
                 #if number_of_parameter_values == 1:
                 print("Run: ", run)
 

@@ -2,7 +2,6 @@ import random
 
 
 class Actor:
-
     def __init__(self, get_possible_actions, learning_rate, discount_factor,
                  eligibility_decay_rate, epsilon, epsilon_decay_rate):
         self.get_possible_actions = get_possible_actions
@@ -32,10 +31,13 @@ class Actor:
     def set_epsilon_to_zero(self):
         self.epsilon = 0
 
+
     def reset_epsilon(self, epsilon):
         self.epsilon = epsilon
 
+
     def choose_action(self, state):
+        # if state is not visited before, initialize values for all state-action pairs from state
         if state not in self.table:
             self.table[state] = {}
             for action in self.get_possible_actions(state):
@@ -46,15 +48,18 @@ class Actor:
 
         possible_actions = list(self.table[state].keys())
 
+        # if no possible actions, return None
         if len(possible_actions) == 0:
             return None
 
+        # do random action by chance, where the probability is decided by epsilon
         if random.random() < self.epsilon:
             random_index = random.randrange(len(self.table[state]))
             return possible_actions[random_index]
 
+        # else, find best action
         best_action_index = 0
-        highest_probability = -10000000
+        highest_probability = -100000000
         for index, action in enumerate(self.table[state]):
             if self.table[state][action]['probability'] > highest_probability:
                 best_action_index = index
@@ -64,7 +69,7 @@ class Actor:
 
 
     def update_values_and_eligibilities(self, td_error):
-
+        # loop through all state action pairs visited in this episode so far, and update values and elegibilities
         for state_action in self.state_action_history:
             state = state_action[0]
             action = state_action[1]
@@ -79,14 +84,3 @@ class Actor:
                     self.eligibility_decay_rate *
                     self.table[state][action]['eligibility']
             }
-
-            """
-            # Normalize probabilities for possible actions from state
-            total_prob = 0
-            for action in self.table[state]:
-                total_prob = self.table[state][action]['probability']
-
-            if total_prob > 0:
-                for action in self.table[state]:
-                    self.table[state][action]['probability'] = self.table[state][action]['probability'] / total_prob
-            """
