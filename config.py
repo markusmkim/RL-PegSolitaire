@@ -1,4 +1,4 @@
-
+"""
 def get_params(is_diamond, size, number_of_episodes, critic_table):
     number_of_nodes = size**2 if is_diamond else (size * (size + 1)) // 2
 
@@ -27,3 +27,4 @@ def get_params(is_diamond, size, number_of_episodes, critic_table):
            actor_discount_factor, \
            critic_discount_factor, \
            critic_neural_network_dimensions
+"""

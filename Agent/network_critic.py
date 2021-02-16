@@ -12,7 +12,6 @@ class NetworkCritic:
         self.discount_factor = discount_factor
         self.eligibility_decay_rate = eligibility_decay_rate
         self.eligibilities = []
-
         self.model = self.build_model()
 
 
@@ -55,26 +54,24 @@ class NetworkCritic:
         td_error = target - self.find_value(current_state)
         return target, td_error
 
-
+    # runs state through network and returns prediction
     def find_value(self, state):
         input_state = convert_string_to_list(state.replace(',', ''))[0]
-
         input_state = np.array([input_state])
         predictions = self.model(input_state)
-
         return predictions.numpy()[0][0]
 
 
     def update_model_and_eligibilities(self, state, target, td_error):
         features = convert_string_to_list(state.replace(',', ''))[0]
-        self.fit(features, target, td_error)  # train
+        self.fit(features, target, td_error)  # train model
 
         # decay eligibilities
         for i in range(len(self.eligibilities)):
             self.eligibilities[i] = self.eligibilities[i] * self.eligibility_decay_rate
 
 
-    def fit(self, features, target, td_error, epochs=1, mbs=1, vfrac=0.1, verbosity=1, callbacks=[]):
+    def fit(self, features, target, td_error):
         params = self.model.trainable_weights
 
         with tf.GradientTape() as tape:
@@ -82,7 +79,6 @@ class NetworkCritic:
             gradients = tape.gradient(loss, params)
             gradients_2 = self.modify_gradients(gradients, td_error)
             self.model.optimizer.apply_gradients(zip(gradients_2, params))
-
 
     # This returns a tensor of losses, OR the value of the averaged tensor.  Note: use .numpy() to get the
     # value of a tensor.
@@ -92,27 +88,20 @@ class NetworkCritic:
         loss = self.model.loss(targets, predictions)  # model.loss = the loss function
         return tf.reduce_mean(loss).numpy() if avg else loss
 
-
+    # update eligibilities and modify gradients
     def modify_gradients(self, gradients, td_error):
-        #print('Old gradients: ', gradients)
-        #print('Eligibilities:', self.eligibilities)
         modified_gradients = []
         for i in range(len(gradients)):
+            # e_i <-- e_i + dV(s)/dw_i
             self.eligibilities[i] = np.add(self.eligibilities[i], gradients[i])
 
-            #if i % 2 == 1:  # if bias tensor of shape (1, x), we need tensor of shape (x, )
-            #    modified_gradients_matrix = (self.eligibilities[i] * -td_error)[0]
-            #else:  # else this is weight tensor  ===>  shape is fine
+            # modify gradient w_i = -e_i * TD-error, such that update rule becomes
+            # w_i <-- w_i - learning_rate * modfied_gradient_i =
+            # w_i <-- w_i + learning rate * TD-error * e_i
             modified_gradients_matrix = self.eligibilities[i] * -td_error
-
             modified_gradients.append(modified_gradients_matrix)
 
-        #print('Gradients:     ', modified_gradients)
         return modified_gradients
 
-
-def my_loss_fn(y_true, y_pred):
-    squared_difference = tf.square(y_true - y_pred)
-    return tf.reduce_mean(squared_difference, axis=-1)  # Note the `axis=-1`
 
 
