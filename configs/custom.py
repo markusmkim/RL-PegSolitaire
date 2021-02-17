@@ -1,7 +1,7 @@
 
 
 config = {
-    'is_diamond': False,
+    'is_diamond': True,
     'size': 6,
     'empty_nodes': [[2, 2], [3, 1], [0, 0]],
     'number_of_episodes': 1200,

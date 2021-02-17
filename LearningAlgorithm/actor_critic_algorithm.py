@@ -42,7 +42,7 @@ class ActorCriticAlgorithm:
         self.total_pegs_left_per_episode = []
 
         for i in range(self.config['number_of_episodes']):
-            print(self.actor.epsilon)
+            print('Episode ', i)
             # initialize SimWorld: PegBoard and PegPlayer
             peg_board = PegBoard(self.config['size'], self.config['is_diamond'], self.config['empty_nodes'])
             peg_player = PegPlayer(peg_board, self.config['reward_win'], self.config['reward_lose'])

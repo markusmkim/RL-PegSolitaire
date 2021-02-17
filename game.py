@@ -16,25 +16,15 @@ from configs.custom import config as custom_config
 
 
 # read config
-config = triangle_5_network
+config = diamond_4_table
 
 # initialize actor-critic model
 algorithm = ActorCriticAlgorithm(config)
 
-"""
-algorithm.evaluate_config(6, 8, ['actor_learning_rate', 'critic_learning_rate', 'epsilon_decay_rate'], {
-    'actor_learning_rate': [0.1, 0.1, 0.1, 0.1, 0.05, 0.05, 0.05, 0.05],
-    'critic_learning_rate': [0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05],
-    'epsilon_decay_rate': [0.9999, 0.99985, 0.9998, 0.99975, 0.9997, 0.99965, 0.9996, 0.99955]
-})
-"""
 
 # run model
 algorithm.run()
 
 # show results
 algorithm.plot_results()
-
-# plots when and how many times the game is one during the run
-# algorithm.plot_wins()
 

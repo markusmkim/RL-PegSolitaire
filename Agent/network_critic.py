@@ -21,8 +21,9 @@ class NetworkCritic:
         model.add(keras.layers.Dense(first_layer, activation='relu', input_shape=(self.input_dim, )))
         for layer in self.layers[1:-1]:
             model.add(keras.layers.Dense(layer, activation='relu'))
-        last_layer = self.layers[-1]
-        model.add(keras.layers.Dense(last_layer))
+        if len(self.layers) > 1:
+            last_layer = self.layers[-1]
+            model.add(keras.layers.Dense(last_layer))
         loss = keras.losses.MeanSquaredError()
         optimizer = keras.optimizers.Adam(learning_rate=self.learning_rate)
         model.compile(optimizer=optimizer, loss=loss)
