@@ -16,7 +16,7 @@ from configs.custom import config as custom_config
 
 
 # read config
-config = diamond_4_table
+config = custom_config
 
 # initialize actor-critic model
 algorithm = ActorCriticAlgorithm(config)

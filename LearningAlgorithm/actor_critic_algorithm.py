@@ -5,7 +5,7 @@ from SimWorld.peg_player import PegPlayer
 from SimWorld.peg_board import PegBoard
 from Helpers.helpers import get_possible_actions
 from Helpers.converters import convert_list_to_string, convert_string_to_list
-from Helpers.plotters import visualize_board, plot_values, plot_mean_values
+from Helpers.plotters import BoardVisualizer, plot_values, plot_mean_values
 from time import sleep
 
 
@@ -35,6 +35,9 @@ class ActorCriticAlgorithm:
 
         # history of pegs left after each episode
         self.total_pegs_left_per_episode = []
+
+        # board visualizer for plotting and gif creation
+        self.board_visualizer = BoardVisualizer()
 
 
     def run(self):
@@ -67,7 +70,7 @@ class ActorCriticAlgorithm:
                 break
 
             if display:
-                visualize_board(convert_string_to_list(state))
+                self.board_visualizer.visualize_board(convert_string_to_list(state))
 
             # reset eligibilities
             self.actor.reset_episode_parameters()  # this method will also decrease epsilon
@@ -105,7 +108,7 @@ class ActorCriticAlgorithm:
                 # visualize game is display flag is True
                 if display:
                     sleep(self.config['display_delay'])
-                    visualize_board(convert_string_to_list(state))
+                    self.board_visualizer.visualize_board(convert_string_to_list(state))
 
             # save result for plotting
             self.total_pegs_left_per_episode.append(peg_board.total_pegs_left)
@@ -113,6 +116,9 @@ class ActorCriticAlgorithm:
             # print result if last episode
             if i == self.config['number_of_episodes'] - 1:
                 print('Total pegs left last episode - ', peg_board.total_pegs_left)
+
+        if self.config['animation_path'] is not None:
+            self.board_visualizer.save_animation(self.config['animation_path'], self.config['display_delay'])
 
 
     def plot_results(self):
