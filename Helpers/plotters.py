@@ -5,13 +5,10 @@ from celluloid import Camera
 
 class BoardVisualizer:
     def __init__(self):
-        self.camera = self.initalize_camera()
-
-
-    def initalize_camera(self):
-        fig = plt.figure()
-        camera = Camera(fig)
-        return camera
+        self.fig = plt.figure()
+        self.ax = self.fig.add_subplot()
+        self.camera = Camera(self.fig)
+        self.episode = []
 
 
     def save_animation(self, path, display_delay):
@@ -65,8 +62,9 @@ class BoardVisualizer:
         nx.draw_networkx_nodes(G, positions, nodelist=blue_nodes, node_color='b')
         nx.draw_networkx_nodes(G, positions, nodelist=red_nodes, node_color='r')
         nx.draw_networkx_edges(G, positions)
-        plt.show()
         self.camera.snap()
+        plt.show()
+
 
 
 def plot_mean_values(values):
