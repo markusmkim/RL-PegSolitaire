@@ -1,23 +1,14 @@
 import networkx as nx
 import matplotlib.pyplot as plt
-from celluloid import Camera
 
 
 class BoardVisualizer:
-    def __init__(self):
-        self.fig = plt.figure('grid')
-        self.ax = self.fig.add_subplot()
-        self.camera = Camera(self.fig)
-        self.episode = []
-
-
-    def save_animation(self, path, display_delay):
-        animation = self.camera.animate(interval=display_delay)
-        animation.save(path)
+    def __init__(self, output_path):
+        self.output_path = output_path
+        self.current_move = 0
 
 
     def visualize_board(self, grid):
-        fig = plt.figure('grid')
         G = nx.Graph()
         blue_nodes = []
         red_nodes = []
@@ -55,19 +46,23 @@ class BoardVisualizer:
         if len(grid[0]) > 1:
             dummy_nodes = ['dummy_node_1', 'dummy_node_2']
             G.add_nodes_from(dummy_nodes)
-            positions['dummy_node_1'] = (-1, 0)
-            positions['dummy_node_2'] = ((len(grid) * 2) - 1, 0)
+            positions['dummy_node_1'] = (-2, 0)
+            positions['dummy_node_2'] = ((len(grid) * 2) - 2, 0)
             nx.draw_networkx_nodes(G, positions, nodelist=dummy_nodes, node_color='w')  # Dummy nodes are white/invisible
 
         # Draw network
         nx.draw_networkx_nodes(G, positions, nodelist=blue_nodes, node_color='b')
         nx.draw_networkx_nodes(G, positions, nodelist=red_nodes, node_color='r')
         nx.draw_networkx_edges(G, positions)
+
+        if self.output_path is not None:
+            filepath = self.output_path + 'plots_last_episode/' + str(self.current_move)
+            plt.savefig(filepath)
         plt.show()
-        self.camera.snap()
+        self.current_move += 1
 
 
-def plot_mean_values(values):
+def plot_mean_values(values, output_path=None):
     x_axis = []
     mean_values = []
 
@@ -81,12 +76,18 @@ def plot_mean_values(values):
         x_axis.append(i)
 
     plt.plot(x_axis, mean_values)
+    if output_path is not None:
+        filepath = output_path + 'average_pegs_left'
+        plt.savefig(filepath)
     plt.show()
 
 
-def plot_values(values):
+def plot_values(values, output_path=None):
     x_axis = []
     for i in range(len(values)):
         x_axis.append(i)
     plt.plot(x_axis, values)
+    if output_path is not None:
+        filepath = output_path + 'pegs_left'
+        plt.savefig(filepath)
     plt.show()

@@ -37,7 +37,7 @@ class ActorCriticAlgorithm:
         self.total_pegs_left_per_episode = []
 
         # board visualizer for plotting and gif creation
-        self.board_visualizer = BoardVisualizer()
+        self.board_visualizer = BoardVisualizer(config['output_path'])
 
 
     def run(self):
@@ -117,14 +117,11 @@ class ActorCriticAlgorithm:
             if i == self.config['number_of_episodes'] - 1:
                 print('Total pegs left last episode - ', peg_board.total_pegs_left)
 
-        if self.config['animation_path'] is not None:
-            self.board_visualizer.save_animation(self.config['animation_path'], self.config['display_delay'])
-
 
     def plot_results(self):
-        plot_values(self.total_pegs_left_per_episode)
+        plot_values(self.total_pegs_left_per_episode, output_path=self.config['output_path'])
         sleep(self.config['display_delay'])
-        plot_mean_values(self.total_pegs_left_per_episode)
+        plot_mean_values(self.total_pegs_left_per_episode, output_path=self.config['output_path'])
         sleep(self.config['display_delay'])
 
 
