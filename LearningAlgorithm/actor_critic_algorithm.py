@@ -117,6 +117,10 @@ class ActorCriticAlgorithm:
             if i == self.config['number_of_episodes'] - 1:
                 print('Total pegs left last episode - ', peg_board.total_pegs_left)
 
+            # create animation is display flag is True
+            if display:
+                self.board_visualizer.create_animation()
+
 
     def plot_results(self):
         plot_values(self.total_pegs_left_per_episode, output_path=self.config['output_path'])

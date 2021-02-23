@@ -1,11 +1,13 @@
 import networkx as nx
 import matplotlib.pyplot as plt
+import imageio
 
 
 class BoardVisualizer:
     def __init__(self, output_path):
         self.output_path = output_path
         self.current_move = 0
+        self.filepaths = []
 
 
     def visualize_board(self, grid):
@@ -56,10 +58,18 @@ class BoardVisualizer:
         nx.draw_networkx_edges(G, positions)
 
         if self.output_path is not None:
-            filepath = self.output_path + 'plots_last_episode/' + str(self.current_move)
+            filepath = self.output_path + 'plots_last_episode/' + str(self.current_move) + '.png'
+            self.filepaths.append(filepath)
             plt.savefig(filepath)
         plt.show()
         self.current_move += 1
+
+
+    def create_animation(self):
+        with imageio.get_writer('mygif.gif', mode='I') as writer:
+            for filepath in self.filepaths:
+                image = imageio.imread(filepath)
+                writer.append_data(image)
 
 
 def plot_mean_values(values, output_path=None):
@@ -73,9 +83,12 @@ def plot_mean_values(values, output_path=None):
         mean_values.append(mean/100)
 
     for i in range(len(mean_values)):
-        x_axis.append(i)
+        x_axis.append((i + 1) * 100)
 
     plt.plot(x_axis, mean_values)
+    plt.title('Average remaining pegs per 100 games')
+    plt.xlabel('Games played')
+    plt.ylabel('Remaining pegs')
     if output_path is not None:
         filepath = output_path + 'average_pegs_left'
         plt.savefig(filepath)
@@ -87,6 +100,9 @@ def plot_values(values, output_path=None):
     for i in range(len(values)):
         x_axis.append(i)
     plt.plot(x_axis, values)
+    plt.title('Remaining pegs per game')
+    plt.xlabel('Games played')
+    plt.ylabel('Remaining pegs')
     if output_path is not None:
         filepath = output_path + 'pegs_left'
         plt.savefig(filepath)
