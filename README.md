@@ -1,3 +1,8 @@
-# RL-PegSolitaire
+# Solving peg solitaire by reinforcement learning 
 
-TEESST
+Describe actor critic etc...
+
+
+
+
+
