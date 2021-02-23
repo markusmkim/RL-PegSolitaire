@@ -53,9 +53,9 @@ class BoardVisualizer:
             nx.draw_networkx_nodes(G, positions, nodelist=dummy_nodes, node_color='w')  # Dummy nodes are white/invisible
 
         # Draw network
-        nx.draw_networkx_nodes(G, positions, nodelist=blue_nodes, node_color='b')
-        nx.draw_networkx_nodes(G, positions, nodelist=red_nodes, node_color='r')
-        nx.draw_networkx_edges(G, positions)
+        nx.draw_networkx_nodes(G, positions, nodelist=blue_nodes, node_color='w', edgecolors='#5e1408')
+        nx.draw_networkx_nodes(G, positions, nodelist=red_nodes, node_color='#ba2811')
+        nx.draw_networkx_edges(G, positions, edge_color="#5e1408")
 
         plt.axis('off')
         if self.output_path is not None:
@@ -67,6 +67,8 @@ class BoardVisualizer:
 
 
     def create_animation(self):
+        if self.output_path is None:
+            return
         animation_path = self.output_path + 'game.gif'
         with imageio.get_writer(animation_path, mode='I') as writer:
             for filepath in self.filepaths:
