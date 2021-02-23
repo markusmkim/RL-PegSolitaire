@@ -4,7 +4,7 @@ config = {
     'is_diamond': True,
     'size': 6,
     'empty_nodes': [[3, 2]],
-    'number_of_episodes': 200,
+    'number_of_episodes': 3200,
     'reward_win': 1000000000,
     'reward_lose': -100,
     'critic_table': True,
@@ -21,5 +21,5 @@ config = {
     'display_delay': 0.1,
     'display_games': "last",  # "all" | "last" | None
     # add output path to save outputs
-    'output_path': "images/example_run/"
+    'output_path': None,  # "images/example_run/"
 }

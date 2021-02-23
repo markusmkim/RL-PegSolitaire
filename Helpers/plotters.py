@@ -57,19 +57,22 @@ class BoardVisualizer:
         nx.draw_networkx_nodes(G, positions, nodelist=red_nodes, node_color='r')
         nx.draw_networkx_edges(G, positions)
 
+        plt.axis('off')
         if self.output_path is not None:
             filepath = self.output_path + 'plots_last_episode/' + str(self.current_move) + '.png'
             self.filepaths.append(filepath)
-            plt.savefig(filepath)
+            plt.savefig(filepath, edgecolor='w')
         plt.show()
         self.current_move += 1
 
 
     def create_animation(self):
-        with imageio.get_writer('mygif.gif', mode='I') as writer:
+        animation_path = self.output_path + 'game.gif'
+        with imageio.get_writer(animation_path, mode='I') as writer:
             for filepath in self.filepaths:
-                image = imageio.imread(filepath)
-                writer.append_data(image)
+                for _ in range(10):
+                    image = imageio.imread(filepath)
+                    writer.append_data(image)
 
 
 def plot_mean_values(values, output_path=None):
