@@ -20,7 +20,9 @@ config = {
     'epsilon_decay_rate': 0.997,  # number_of_episodes / (number_of_episodes + 2)
     'epsilon_zero_on_last_episode': True,
     'display_delay': 0.1,
-    'display_games': "last"  # all | last | none
+    'display_games': "last",  # "all" | "last" | None
+    # add animation path to save plots_last_episode, else None
+    'output_path': None
 }
 
 """
