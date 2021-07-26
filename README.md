@@ -14,7 +14,7 @@ the game and knows the transitions between states by actions.
 
 | ![actor-critic](/images/actor-critic_rl-system.jpg) |
 | --- |
-| The basic components of an Actor-Critic reincforcement learning system for playing Peg Solitaire. The red dotted arrows represents communication related to learning. |
+| *The basic components of an Actor-Critic reincforcement learning system for playing Peg Solitaire. The red dotted arrows represents communication related to learning.* |
 
 
 
