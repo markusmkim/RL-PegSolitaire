@@ -12,10 +12,19 @@ Here it is used to solve Peg Solitaire. As shown in the figure,
 the game is represented by a Simulated World that holds the rules of 
 the game and knows the transitions between states by actions. 
 
-![actor-critic](/images/actor-critic_rl-system.jpg)
-#### The basic components of an Actor-Critic reincforcement learning system for playing Peg Solitaire. The red dotted arrows represents communication related to learning.
+| ![actor-critic](/images/actor-critic_rl-system.jpg) |
+| --- |
+| The basic components of an Actor-Critic reincforcement learning system for playing Peg Solitaire. The red dotted arrows represents communication related to learning. |
 
 
+
+### Results
+The goal of the game is to empty the entire board except for one peg, by making certain valid moves.
+In this case, the remaining peg does not need to be in the middle.
+The figures below shows the results of one complete round of training (3200 games played).
+The two leftmost figures shows the progression of learning by plotting the
+number of remaining pegs after each game played. The rightmost animation shows how the last
+game in the training was played out, to showcase the skills of the trained agent.
 
 Progression of learning | Averaged progression | Last game 
 ------------ | ------------- | -------------
